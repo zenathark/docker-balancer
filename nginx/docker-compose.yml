@@ -1,0 +1,33 @@
+version: '3'
+
+networks:
+  backend:
+    driver: bridge
+
+services:
+  balancer:
+    build: .
+    ports:
+      - "80:80"
+    networks:
+      - backend
+  client1:
+    build: ../client/.
+    environment:
+      - REDIS_SERVER=db-client1
+    networks:
+      - backend
+  client2:
+    build: ../client/.
+    environment:
+      - REDIS_SERVER=db-client2
+    networks:
+      - backend
+  db-client1:
+    image: redis
+    networks:
+      - backend
+  db-client2:
+    image: redis
+    networks:
+      - backend
